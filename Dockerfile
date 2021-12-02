@@ -2,6 +2,7 @@ FROM ubuntu:xenial
 
 # ARG variables only persist during build time
 ARG PYTHON_VER="3.6.14"
+ARG PYTEST_VER="6.2.5"
 
 # Update package index, install packages
 RUN apt-get update && apt-get upgrade
@@ -26,10 +27,17 @@ RUN apt-get install -y \
 RUN wget https://www.python.org/ftp/python/$PYTHON_VER/Python-$PYTHON_VER.tgz
 RUN tar xvf Python-$PYTHON_VER.tgz && rm Python-$PYTHON_VER.tgz
 WORKDIR "/Python-$PYTHON_VER"
-RUN ./configure
-RUN make
-RUN make install
+RUN ./configure && make && make install
 
 # Show that python3 and pip3 are installed
 CMD python3 --version; pip3 --version
+
+# Set up python tests
+RUN pip3 install pytest==$PYTEST_VER
+WORKDIR "/"
+COPY tests/ .
+
+# Run test
+ENTRYPOINT [ "pytest" ]
+
 

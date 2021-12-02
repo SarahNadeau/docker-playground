@@ -1,7 +1,14 @@
 # See: https://docs.travis-ci.com/user/docker/
 language: python
+
 services:
   - docker
+
+# blocklist
+branches:
+  except:
+    - circleci-project-setup
+
 before_install:
   - docker build -t intro-project .
   - docker run intro-project

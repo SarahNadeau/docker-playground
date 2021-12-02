@@ -8,8 +8,17 @@ services:
 branches:
   except:
     - circleci-project-setup
+    - master
 
 before_install:
   - docker build -t intro-project .
   - docker run intro-project
   - docker ps
+
+# command to install dependencies
+install:
+  - pip install -r requirements.txt
+  - pip install .
+
+# command to run tests
+script: pytest

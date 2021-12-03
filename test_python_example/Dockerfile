@@ -11,3 +11,7 @@ COPY tests/ .g
 
 # Run test
 RUN python3 -m unittest
+
+# Have the container do something
+CMD echo "This container doesn't do anything yet."
+

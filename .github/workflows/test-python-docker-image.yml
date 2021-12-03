@@ -15,4 +15,4 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image for test_python_example
-      run: docker build --tag test-python-example:$(date +%s) test_python_example/ 
+      run: docker build --no-cache --tag test-python-example:$(date +%s) test_python_example/

@@ -1,9 +1,7 @@
-name: Docker Image CI
+name: Build and push docker image to Docker Hub
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
     branches: [ master ]
 
 jobs:
@@ -11,8 +9,29 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+      
     steps:
-    - uses: actions/checkout@v2
-    - name: Build the Docker image for test_python_example
-      run: docker build --no-cache --tag test-python-example:$(date +%s) test_python_example/
+    - name: Check Out Repo 
+      uses: actions/checkout@v2
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKER_HUB_USERNAME }}
+        password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+    - name: Set up Docker Buildx
+      id: buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Build and push
+      id: docker_build
+      uses: docker/build-push-action@v2
+      with:
+        context: test_python_docker
+        file: test_python_docker/Dockerfile
+        push: true
+        tags: ${{ secrets.DOCKER_HUB_USERNAME }}/simplewhale:latest
+
+    - name: Image digest
+      run: echo ${{ steps.docker_build.outputs.digest }}

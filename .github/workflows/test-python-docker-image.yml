@@ -15,4 +15,4 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image for test_python_example
-      run: docker build test_python_example --file Dockerfile --tag test-python-example:$(date +%s)
+      run: docker build test_python_example/ --file Dockerfile --tag test-python-example:$(date +%s)

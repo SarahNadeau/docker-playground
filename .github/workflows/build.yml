@@ -6,18 +6,18 @@ on: push
 
 jobs:
 
-  setup-cache:
-    runs-on: ubuntu-latest
-    # See https://docs.docker.com/engine/reference/commandline/buildx_build/
-    # And https://evilmartians.com/chronicles/build-images-on-github-actions-with-docker-layer-caching
-    steps:
-      - name: Cache Docker layers
-        uses: actions/cache@v2
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx
+#  setup-cache:
+#    runs-on: ubuntu-latest
+#    # See https://docs.docker.com/engine/reference/commandline/buildx_build/
+#    # And https://evilmartians.com/chronicles/build-images-on-github-actions-with-docker-layer-caching
+#    steps:
+#      - name: Cache Docker layers
+#        uses: actions/cache@v2
+#        with:
+#          path: /tmp/.buildx-cache
+#          key: ${{ runner.os }}-buildx-${{ github.sha }}
+#          restore-keys: |
+#            ${{ runner.os }}-buildx
 
   test:
     uses: SarahNadeau/docker-playground/.github/workflows/test.yml@master
@@ -48,15 +48,15 @@ jobs:
           file: ./test_python_example/Dockerfile
           target: app
           push: true
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-new # mode=max means export layers from all stage to cache
+#          cache-from: type=local,src=/tmp/.buildx-cache
+#          cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-new # mode=max means export layers from all stage to cache
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/test_python_example:latest
 
-      - name: Move cache
-        # This apparently prevents the cache from growing in size forever
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+#      - name: Move cache
+#        # This apparently prevents the cache from growing in size forever
+#        run: |
+#          rm -rf /tmp/.buildx-cache
+#          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}

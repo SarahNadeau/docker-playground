@@ -14,19 +14,18 @@ on:
         type: string
 
 jobs:
+
   build_to_test:
     runs-on: ubuntu-latest
     steps:
-      - name: Check Out Repo  # each job runs in an isolated environment, so need to check out the repo in each job
+      - name: Check Out Repo
         uses: actions/checkout@v2
 
       - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v1
 
-      # See https://docs.docker.com/engine/reference/commandline/buildx_build/
-      # And https://evilmartians.com/chronicles/build-images-on-github-actions-with-docker-layer-caching
-      - name: Cache Docker layers  # also need to set up the cache in each job, using the same prefix (here ${{ runner.os }}-buildx) makes it sharable between jobs
+      - name: Cache Docker layers
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
@@ -46,7 +45,6 @@ jobs:
           cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-new
 
       - name: Move cache
-        # This apparently prevents the cache from growing in size forever
         run: |
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache

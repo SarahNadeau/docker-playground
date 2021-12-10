@@ -1,4 +1,4 @@
-# This caller workflow test, builds, and pushes the image to Docker Hub.
+# This caller workflow tests, builds, and pushes the image to Docker Hub.
 
 name: Build and push
 
@@ -24,6 +24,7 @@ jobs:
 
       # See https://docs.docker.com/engine/reference/commandline/buildx_build/
       # And https://evilmartians.com/chronicles/build-images-on-github-actions-with-docker-layer-caching
+      # And then for caching: https://www.nicolabs.net/2021/Speed-up-automated-docker-build-with-github-actions
       - name: Cache Docker layers
         uses: actions/cache@v2
         with:

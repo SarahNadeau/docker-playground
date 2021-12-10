@@ -1,6 +1,4 @@
 # This called workflow builds a docker container, targeting the "test" stage.
-# TODO: need to include container-specific element to cache key?
-# TODO: move check out repo to another called workflow, or need to repeat this step?
 
 name: Build to test
 
@@ -19,7 +17,7 @@ jobs:
   build_to_test:
     runs-on: ubuntu-latest
     steps:
-      - name: Check Out Repo
+      - name: Check Out Repo  # each job runs in an isolated environment, so need to check out the repo in each job
         uses: actions/checkout@v2
 
       - name: Set up Docker Buildx
@@ -28,7 +26,7 @@ jobs:
 
       # See https://docs.docker.com/engine/reference/commandline/buildx_build/
       # And https://evilmartians.com/chronicles/build-images-on-github-actions-with-docker-layer-caching
-      - name: Cache Docker layers
+      - name: Cache Docker layers  # also need to set up the cache in each job, using the same prefix (here ${{ runner.os }}-buildx) makes it sharable between jobs
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache

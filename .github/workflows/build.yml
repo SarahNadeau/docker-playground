@@ -52,14 +52,12 @@ jobs:
           cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-new. # mode=max means export layers from all stage to cache
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/test_python_example:latest
 
-      - name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
-
-  move-cache:
-    runs-on: ubuntu-latest
-    steps:
-      # This apparently prevents the cache from growing in size forever
       - name: Move cache
+        # This apparently prevents the cache from growing in size forever
         run: |
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
+

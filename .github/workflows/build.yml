@@ -7,7 +7,7 @@ on: push
 jobs:
 
   test:
-    uses: SarahNadeau/docker-playground/.github/workflows/test.yml@main
+    uses: SarahNadeau/docker-playground/.github/workflows/test.yml@master
     with:
       path_to_context: "./test_python_example"
 

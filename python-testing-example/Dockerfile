@@ -9,23 +9,27 @@ RUN apt-get install -y python3
 # Copy in app code
 COPY app/ .
 
-# Build app now that tests have passed, keep container light by excluding tests
+# App stage is the production stage
 FROM base as app
 
 # Running the container runs the app
 CMD python3 main.py
 
 
-FROM base as test
+# Test stage is built on top of the app, runs tests on it
+FROM app as test
 
 # Copy in test code
-# TODO: make the tests actually test the app
-COPY tests/ .
+RUN mkdir tests/
+COPY tests/ tests/
 
-# Run tests
-RUN python3 -m unittest
+# Run app
+RUN python3 main.py
 
-# Test with: docker build --target=test -t <image name> .
+# Run tests on app output
+RUN python3 -m unittest discover -s tests
+
+# Test with: docker build --progress=plain --target=test -t <image name> .
 # Build with: docker build --target=app -t <image name> .
 # Run with: docker run <image name>
 

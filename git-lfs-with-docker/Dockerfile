@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alpine:latest as test
 
 COPY SRR5481494_sub_1.fastq.gz .
 
